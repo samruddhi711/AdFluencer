@@ -3,7 +3,6 @@ from flask import Flask,render_template
 app = Flask(__name__)
 
 from dotenv import load_dotenv
-import os
 
 @app.route('/')
 def home():
