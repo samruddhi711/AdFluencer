@@ -1,12 +1,13 @@
-from flask import render_template,redirect,request,url_for,flash
+from flask import render_template,redirect,request,url_for,flash,session
 from app import app
 from models import db,User,Cart,Order,Advertise,Transaction
 from werkzeug.security import generate_password_hash,check_password_hash
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
+   
+        return render_template('index.html')
+   
 @app.route('/creator_login')
 def creator_login():
     return render_template('creator_login.html')
@@ -25,11 +26,14 @@ def creator_login_post():
     if not user:
         flash("Username does not exists .")
         return redirect(url_for('creator_login'))
+    
     if not check_password_hash(user.passhash ,password):
         flash("Incorrect Password")
         return redirect(url_for('creator_login'))
 
-    return redirect(url_for('index'))
+    session['user_id'] = user.id
+    flash("Login Sucessful!")
+    return redirect(url_for('creator_dashboard'))
 
 @app.route('/sponsor_login')
 def sponsor_login():
@@ -88,3 +92,15 @@ def register_post():
     db.session.add(new_user)
     db.session.commit()
     return redirect (url_for("index"))
+
+@app.route('/admin' , methods = ['GET' ,'POST'])
+def admin():
+    return render_template('admin.html')
+
+@app.route('/creator_dashboard')
+def creator_dashboard():
+    if 'user_id' in session:
+        return render_template('creator_dashboard.html')
+    else:
+        flash("Please login to continue!")
+        return redirect(url_for('creator_login'))
