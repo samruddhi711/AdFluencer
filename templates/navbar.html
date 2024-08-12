@@ -7,6 +7,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if 'user_id' in session %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ url_for ('creator_dashboard')}}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ url_for ('logout')}}">Logout</a>
+          </li>
+            
+          {% else %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ url_for ('register')}}">Register</a>
           </li>
@@ -21,6 +30,9 @@
               <li><a class="dropdown-item" href="{{ url_for('creator_login') }}">Creator Login</a></li>
               <li><a class="dropdown-item" href="{{ url_for('sponsor_login') }}">Brand Login</a></li>
               
+            
+          {% endif %}
+          
             </ul>
           </li>
 

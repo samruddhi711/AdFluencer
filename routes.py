@@ -53,13 +53,14 @@ def sponsor_login_post():
     if not user:
         flash("Username does not exists .")
         return redirect(url_for('sponsor_login'))
+    
     if not check_password_hash(user.passhash ,password):
         flash("Incorrect Password")
         return redirect(url_for('sponsor_login'))
 
+    session['user_id'] = user.id
+    flash("Login Sucessful!")
     return redirect(url_for('index'))
-
-
 
 @app.route('/register')
 def register():
@@ -153,6 +154,45 @@ def creator_dashboard_post():
     db.session.commit()
     flash("Profile updated successfully!")
     return redirect(url_for('creator_dashboard'))
+
+@app.route('/sponsor_dashboard')
+@auth_required
+def sponsor_dashboard():
+   
+        user = User.query.get(session['user_id'])
+        return render_template('sponsor_dashboard.html' , user=user)
+    
+@app.route('/sponsor_dashboard' ,methods = ['POST'])
+@auth_required
+def sponsor_dashboard_post():
+    username = request.form.get('username')
+    cpassword = request.form.get('cpassword')
+    password = request.form.get('password')
+    name = request.form.get('name')
+
+    if not username or not cpassword or not password:
+        flash("Please out all the fields ")
+        return redirect(url_for('sponsor_dashboard'))
+    
+    user = User.query.get(session['user_id'])
+    if not  check_password_hash(user.passhash,cpassword):
+        flash("Incorrect Password")
+        return redirect(url_for('sponsor_dashboard'))
+
+    if username != user.username:
+        new_username = User.query.filter_by(username =username).first()
+        if new_username:
+            flash("Username already exists.!")
+            return redirect(url_for('sponsor_dashboard'))
+
+    new_password_hash = generate_password_hash(password, method='pbkdf2:sha256')
+    user.username = username
+    user.passhash = new_password_hash
+    user.name = name
+    db.session.commit()
+    flash("Profile updated successfully!")
+    return redirect(url_for('sponsor_dashboard'))
+
 
 @app.route('/logout')
 @auth_required
