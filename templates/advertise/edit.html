@@ -1,21 +1,22 @@
 {% extends 'layout.html' %}
 {% block title %}
-Add Advertise
+Edit Advertise
     
 {% endblock %}
 {% block content %}
 <div class="container-sm">
 <h1 class="display-1">
-    Add Advertise
+    Edit Advertise
 </h1>
 
-<form action="{{url_for('add_advertise_post')}}" method="post" class="form">
+<form action="{{url_for('edit_advertise_post',id=advertise.id)}}" method="post" class="form">
     <div class="form-group">
         <label for="name" class="form-label">Advertise name:</label>
         <input type="text" 
         name="name" 
         id="name" 
-        class="form-control" 
+        class="form-control"
+        value="{{advertise.name}}" 
         required>
     </div>
     <div class="form-group">
@@ -23,7 +24,7 @@ Add Advertise
         <input type="number" 
         name="price" 
         min="1"
-        value="1"
+        value="{{advertise.price}}"
         id="price" 
         class="form-control" 
         required>
@@ -32,7 +33,7 @@ Add Advertise
         <label for="category_id" class="form-label">Niche :</label>
         <select name="category_id"  id="category_id" class="form-control" required>
             {% for cat in categories %}
-            {% if cat.id == category.id %}
+            {% if cat.id == advertise.category_id %}
             <option selected value="{{cat.id}}">{{cat.name}}</option>
             {% else %}
             <option value="{{cat.id}}">{{cat.name}}</option>         
@@ -46,7 +47,7 @@ Add Advertise
         name="quantity" 
         id="quantity" 
         min="1"
-        value="1"
+        value="{{advertise.quantity}}"
         class="form-control" 
         required>
     </div>
@@ -55,7 +56,7 @@ Add Advertise
         <input type="date" 
         name="date" 
         id="date" 
-        value="{{now}}"
+        value="{{advertise.date}}"
         class="form-control" 
         required>
     </div>
@@ -65,13 +66,14 @@ Add Advertise
         name="description" 
         id="description" 
         class="form-control"
-        rows="5" 
+        value ="{{advertise.description}}"
+        rows="5"
         required></textarea>
     </div>
     <br>
     <button type="submit" class="btn btn-success">
         <li class="fas fa-plus"></li>
-        Add
+        Edit
     </button>
     
     

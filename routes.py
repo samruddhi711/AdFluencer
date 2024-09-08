@@ -330,7 +330,8 @@ def add_advertise(category_id):
     if not category:
         flash("Category does not exist.")
         return redirect(url_for('admin'))
-    return render_template('advertise/add.html' , category=category , categories = categories)
+    now = datetime.now().strftime('%Y-%m-%d')
+    return render_template('advertise/add.html' , category=category , categories = categories,now=now)
 
 @app.route('/advertise/add/' , methods = ['POST'])
 @admin_required
@@ -370,5 +371,78 @@ def add_advertise_post():
     flash ("Advertise added sucessfully!")
     return redirect(url_for('show_category', id=category_id))
          
+@app.route('/advertise/<int:id>/edit')
+@admin_required
+def edit_advertise(id):
+    categories = Category.query.all()
+    advertise = Advertise.query.get(id)
+    
+    return render_template('advertise/edit.html' ,categories=categories,advertise=advertise)
+
+@app.route('/advertise/<int:id>/edit',methods=['POST'])
+@admin_required
+def edit_advertise_post(id):
+    name = request.form.get('name')
+    price = request.form.get('price')
+    category_id = request.form.get('category_id')
+    quantity = request.form.get('quantity')
+    description = request.form.get('description')
+    date = request.form.get('date')
+
+    category = Category.query.get(category_id)
+    if not category:
+        flash("Category does not exists.")
+        return redirect(url_for('admin'))
+
+    if not name or not price or not quantity or not date or not description:
+        flash("Please fill all the fields")
+        return redirect(url_for('add_advertise',category_id=category_id))
+    try:
+        quantity = int(quantity)
+        price = float(price)
+        date = datetime.strptime(date,'%Y-%m-%d')
+    except ValueError:
+        flash("Invalid quantity or price")
+        return redirect(url_for('add_advertise',category_id=category_id))
+    if price <=0 or quantity <=0:
+        flash("Invalid quantity or Price")
+        return redirect(url_for('add_advertise',category_id=category_id))
+    if date<datetime.now():
+        flash("Invalid Relase date.")
+        return redirect(url_for('add_advertise',category_id=category_id))
+    
+    advertise = Advertise.query.get(id)
+    advertise.name=name
+    advertise.price=price
+    advertise.category=category
+    advertise.quantity=quantity
+    advertise.date=date
+    db.session.commit()
+    flash ("Advertise edited sucessfully!")
+    return redirect(url_for('show_category', id=category_id))
+
+@app.route('/advertise/<int:id>/delete')
+@admin_required
+def delete_advertise(id):
+    advertise = Advertise.query.get(id)
+    if not advertise:
+        flash("Advertise doest not exists ")
+        return redirect(url_for('admin'))
+
+    return render_template('advertise/delete.html',advertise=advertise)
+
+@app.route('/advertise/<int:id>/delete',methods=["POST"])
+@admin_required
+def delete_advertise_post(id):
+    advertise = Advertise.query.get(id)
+    if not advertise:
+        flash("Advertise doest not exists")
+        return redirect(url_for('admin'))
+    category_id=advertise.category.id
+    db.session.delete(advertise)
+    db.session.commit()
+
+    flash("Advertise deleted sucessfuly")
+    return redirect(url_for('show_category', category_id=category_id))
          
      
