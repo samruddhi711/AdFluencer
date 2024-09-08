@@ -1,57 +1,102 @@
-{% extends 'layout.html' %}
-{% block content %}
-<div class="container-sm">
-    <h1>Sponsor Dashboard</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-    <h1>Hello @{{ user.username }}!</h1>
-    <div class="profile-pic" >
-        <img src="https://api.dicebear.com/9.x/lorelei/svg?seed={{user.username}}"  alt="" width="150">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>
+        {% block title %}
+        AdFluencer
+        {% endblock %}
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {% block style %}
+
+    {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for ('index')}}">AdFluencer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if 'user_id' in session %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="{{ url_for ('sponsor_dashboard_profile')}}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for ('logout')}}">Logout</a>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for ('register')}}">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for ('admin')}}">Admin</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Login
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('creator_login') }}">Creator Login</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('sponsor_login') }}">Brand Login</a></li>
+
+
+                            {% endif %}
+
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+    {% endwith %}
+    {% block content %}
+    <div class="container-sm">
+        <h1>Sponsor Dashboard</h1>
+
+        <h1>Hello @{{ user.username }}!</h1>
+        <div class="profile-pic">
+            <img src="https://api.dicebear.com/9.x/lorelei/svg?seed={{user.username}}" alt="" width="150">
+        </div>
     </div>
 
 
-    
-<br><br>
+    <br><br>
+    {% endblock %}
 
-    <!-- form to change paasword and the username -->
-    <form action="" method="post" class="form">
-        <div class="form-group">
-            <label for="username" class="form-label">Username:</label>
-            <input type="text" name="username" id="username" class="form-control" required>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="cpassword" class="form-label">Current Password:</label>
-            <input type="password"
-             name="cpassword" 
-             id="cpassword"
-             value="{{user.username}}" 
-             class="form-control" required>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="password" class="form-label">New Password:</label>
-            <input type="password" name="password" id="password" class="form-control" required>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="name" class="form-label">Name:</label>
-            <input type="text" name="name" id="name"  value="{{user.name}}" class="form-control">
-        </div>
-        <br>
-        <div class="form-group">
-            <input type="submit" value="update" class="btn btn-primary">
-            <a href="{{ url_for('logout')}}" class="btn btn-outline-danger">Logout</a>
-        </div>
-    </form>
-    <br>
-    
+    {% block script %}
+
+    {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-</div>
-    
-{% endblock %}
+</body>
 
-
-
+</html>

@@ -1,33 +1,40 @@
 {% extends 'layout.html' %}
 {% block title %}
-Admin
+Advertise of Category {{category.name}}
 {% endblock %}
 
 {% block content %}
 <div class="container-sm">
-    <h1>Admin Dashboard</h1>
-    <a href="{{ url_for ('add_category')}}" class="btn btn-success">
+    <h1>Advertise of Category {{category.name}}</h1>
+    <a href="{{ url_for ('add_advertise' , category_id = category.id)}}" class="btn btn-success">
         <i class="fas fa-plus"></i>
         Add
     </a>
-    
+    <h1 class="display-2">Advertise :</h1>
     <table class="table">
         <thead>
             <tr>
-                <th>Category Id :</th>
-                <th>Category Name :</th>
+                <th>Advertise Id :</th>
+                <th>Advertise Name :</th>
+                <th>Budget :</th>
                 <th>No. of Advertisement :</th>
+                <th>Release Date :</th>
                 <th>Action : </th>
             </tr>
         </thead>
         <tbody>
-            {% for category in categories %}
+            {% for advertise in category.advertise %}
             <tr>
 
 
-                <td>{{category.id}}</td>
-                <td>{{ category.name}}</td>
-                <td>{{category.advertise|length}}</td>
+                <td>{{advertise.id}}</td>
+                <td>{{advertise.name}}</td>
+                <td>{{advertise.price}}</td>
+                <td>{{advertise.quantity}}</td>
+                <td>{{advertise.date}}</td>
+                
+                
+                
                 <td>
                     <a href="{{url_for('show_category',id=category.id)}}" class="btn btn-primary">
                         <i class="fas fa-search"></i>

@@ -1,7 +1,27 @@
 {% extends 'layout.html' %}
+{% block style %}
+<style>
+    .model1{
+        background-color: transparent;
+        border-radius: 30px;
+        margin: 100px 50px 70px 100px;
+    }
+    h1{
+        text-align: center;}
+    .button1{
+
+        background-color: rgba(2, 68, 17, 0.684);
+        color: white;
+        justify-content: center;
+        
+
+        }
+</style>
+    
+{% endblock %}
 {% block content %}
-<div class="container-sm">
-    <h1>Influencer Login</h1>
+<div class="container-sm model1">
+    <h1>Creator Login</h1>
     <form action="" class="form" method="post">
        
         <div class="form-group">
@@ -14,7 +34,7 @@
         </div>
         <br>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn button1">Login</button>
         </div>
     </form>
 </div>

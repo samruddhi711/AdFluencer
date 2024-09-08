@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+{% block title %}
+Add Advertise
+    
+{% endblock %}
+{% block content %}
+<div class="container-sm">
+<h1 class="display-1">
+    Add Advertise
+</h1>
+
+<form action="{{url_for('add_advertise_post')}}" method="post" class="form">
+    <div class="form-group">
+        <label for="name" class="form-label">Advertise name:</label>
+        <input type="text" 
+        name="name" 
+        id="name" 
+        class="form-control" 
+        required>
+    </div>
+    <div class="form-group">
+        <label for="price" class="form-label">Budget:</label>
+        <input type="number" 
+        name="price" 
+        min="1"
+        id="price" 
+        class="form-control" 
+        required>
+    </div>
+    <div class="form-group">
+        <label for="category_id" class="form-label">Niche :</label>
+        <select name="category_id"  id="category_id" class="form-control" required>
+            {% for cat in categories %}
+            {% if cat.id == category.id %}
+            <option selected value="{{cat.id}}">{{cat.name}}</option>
+            {% else %}
+            <option value="{{cat.id}}">{{cat.name}}</option>         
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="quantity" class="form-label">No of Advertise :</label>
+        <input type="number" 
+        name="quantity" 
+        id="quantity" 
+        min="1"
+        class="form-control" 
+        required>
+    </div>
+    <div class="form-group">
+        <label for="date" class="form-label">Release Date :</label>
+        <input type="date" 
+        name="date" 
+        id="date" 
+        class="form-control" 
+        required>
+    </div>
+    <div class="form-group">
+        <label for="description" class="form-label">Description :</label>
+        <textarea  
+        name="description" 
+        id="description" 
+        class="form-control"
+        rows="5" 
+        required></textarea>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-success">
+        <li class="fas fa-plus"></li>
+        Add
+    </button>
+    
+    
+   
+</form>
+
+</div>
+
+    
+{% endblock %}

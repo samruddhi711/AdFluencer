@@ -1,6 +1,12 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary">
+<style>
+  .navbar .nav-item{
+    margin: 20px 50px 20px 50px;
+  }
+</style>
+<div class="container-sm">
+<nav class="navbar navbar-expand-lg bg-body-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{{ url_for ('index')}}">AdFluencer</a>
+      <a class="navbar-brand" href="{{url_for ('home')}}">AdFluencer</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,8 +14,9 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if 'user_id' in session %}
+          
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for ('creator_dashboard')}}">Profile</a>
+            <a class="nav-link active" aria-current="page" href="{{ url_for ('index')}}">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ url_for ('logout')}}">Logout</a>
@@ -41,3 +48,4 @@
       </div>
     </div>
   </nav>
+</div>

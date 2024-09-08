@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block title %}
+edit categories
+    
+{% endblock %}
+{% block content %}
+<div class="container-sm">
+<h1 class="display-1">
+    Edit Category
+</h1>
+
+<form action="" method="post" class="form">
+    <div class="form-group">
+        <label for="name" class="form-label">Category name:</label>
+        <input type="text" name="name" id="name" class="form-control" value="{{category.name}}" required>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">
+            
+            Update
+            </button>
+    </div>
+</form>
+
+</div>
+
+    
+{% endblock %}
