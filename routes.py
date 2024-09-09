@@ -8,7 +8,33 @@ from datetime import datetime
 @app.route('/')
 def home():
      return render_template("home.html")
+     
+@app.route('/admin_login')
+def admin_login():
+    return render_template('admin_login.html')
 
+@app.route('/admin_login' , methods = ['POST'])
+def admin_login_post():
+    username =request.form.get('username')
+    password = request.form.get('password')
+
+    if not username or not password:
+        flash("Please fill out all the fields.")
+        return redirect(url_for('admin_login'))
+    
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        flash("Username does not exists .")
+        return redirect(url_for('admin_login'))
+    
+    if not check_password_hash(user.passhash ,password):
+        flash("Incorrect Password")
+        return redirect(url_for('admin_login'))
+
+    session['user_id'] = user.id
+    flash("Login Sucessful!")
+    return redirect(url_for('admin_dashboard'))
     
 
 @app.route('/creator_login')
@@ -95,7 +121,7 @@ def register_post():
     new_user = User(username=username,passhash = password_hash,name = name)
     db.session.add(new_user)
     db.session.commit()
-    return redirect (url_for("index"))
+    return redirect (url_for("home"))
 
 
 
@@ -133,6 +159,51 @@ def index():
              return redirect(url_for('admin'))
     
         return render_template('index.html')
+
+@app.route('/admin_dashboard')
+@auth_required
+def admin_dashboard():
+   
+        user = User.query.get(session['user_id'])
+        return render_template('admin_dashboard.html' , user=user)
+
+@app.route('/admin_dashboard_profile')
+@auth_required
+def admin_dashboard_profile():
+   
+        user = User.query.get(session['user_id'])
+        return render_template('admin_dashboard_profile.html' , user=user)
+    
+@app.route('/admin_dashboard_profile' ,methods = ['POST'])
+@auth_required
+def admin_dashboard_profile_post():
+    username = request.form.get('username')
+    cpassword = request.form.get('cpassword')
+    password = request.form.get('password')
+    name = request.form.get('name')
+
+    if not username or not cpassword or not password:
+        flash("Please out all the fields ")
+        return redirect(url_for('admin_dashboard_profile'))
+    
+    user = User.query.get(session['user_id'])
+    if not  check_password_hash(user.passhash,cpassword):
+        flash("Incorrect Password")
+        return redirect(url_for('admin_dashboard_profile'))
+
+    if username != user.username:
+        new_username = User.query.filter_by(username =username).first()
+        if new_username:
+            flash("Username already exists.!")
+            return redirect(url_for('admin_dashboard_profile'))
+
+    new_password_hash = generate_password_hash(password, method='pbkdf2:sha256')
+    user.username = username
+    user.passhash = new_password_hash
+    user.name = name
+    db.session.commit()
+    flash("Profile updated successfully!")
+    return redirect(url_for('admin_dashboard_profile'))
 
 @app.route('/creator_dashboard')
 @auth_required
@@ -443,6 +514,6 @@ def delete_advertise_post(id):
     db.session.commit()
 
     flash("Advertise deleted sucessfuly")
-    return redirect(url_for('show_category', category_id=category_id))
+    return redirect(url_for('show_category', id=category_id))
          
      

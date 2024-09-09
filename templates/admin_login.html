@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block style %}
+<style>
+    .model1{
+        background-color: transparent;
+        border-radius: 30px;
+        margin: 100px 50px 70px 100px;
+    }
+    h1{
+        text-align: center;}
+    .button1{
+
+        background-color: rgba(2, 68, 17, 0.684);
+        color: white;
+        justify-content: center;
+        
+
+        }
+</style>
+    
+{% endblock %}
+{% block content %}
+<div class="container-sm model1">
+    <h1>Admin Login</h1>
+    <form action="" class="form" method="post">
+       
+        <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <button type="submit" class="btn button1">Login</button>
+        </div>
+    </form>
+</div>
+    
+{% endblock %}
